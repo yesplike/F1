@@ -1,0 +1,107 @@
+<html>
+<head>
+	<TITLE></TITLE>
+	<META content="text/html; charset=utf-8" http-equiv=Content-Type>
+	<script type="text/javascript" src="../js/jquery-3.1.1.min.js"></script>
+	<script type="text/javascript" src="../js/jquery.cookie.js"></script>
+	<script type="text/javascript" src="../js/top.js"></script>
+
+
+	<script type="text/javascript">
+
+		function sub() {
+
+		    var username=$("#username").val();
+		    var password=$("#password").val();
+
+            if((username==""||username.length<0)||(password==""||password.length<0)){
+                alert("必须输入用户名与密码");
+                return
+            }
+
+		    var d={
+		        "username":username,
+		        "password":password
+			};
+
+		    var data=JSON.stringify(d);
+
+		    var SUBMIT_URL="http://localhost:8080/account/login";
+		    $.ajax({
+                contentType: "application/json",     //  前端向后端传的格式
+				url:SUBMIT_URL,
+				data:data,                                  //前端往后端传的数据
+				dataType:"text json",                            // 后端往前端传的数据格式
+				type:"post",
+				statusCode:{
+
+				    200:function (data) {
+						$.cookie("account",data.username);
+                        window.location="main.html"
+                    },
+					404:function (data) {
+                        window.location="login.html"
+                    }
+				}
+			})
+        }
+
+	</script>
+
+</head>
+
+<body>
+<div id="top">
+
+</div>
+
+<td valign="top" width="10%" align="left">
+	<table align="left" bgcolor="#008800" border="0" cellspacing="2"
+		   cellpadding="2">
+		<tr>
+			<td bgcolor="#FFFF88">
+				<a href="main.html"><b><font color="BLACK" size="2">&lt;&lt; 主菜单 </font>
+				</b></a>
+			</td>
+		</tr>
+	</table>
+</td>
+
+	<table align="center" border="0">
+		<tr>
+			<td colspan="2">
+				
+				<br />
+				&nbsp;
+			</td>
+		</tr>
+		<tr>
+			
+			<td>
+				用户名:<input type="text" id="username" name="username">
+			</td>
+		</tr>
+		<tr>
+			
+			<td>
+				密&nbsp;&nbsp;&nbsp;码:<input type="text" id="password" name="password">
+			</td>
+		</tr>
+		<tr>
+
+			<td>
+				<input type="image" border="0" src="../images/button_submit.gif" onclick="sub()"/>
+				<a href="register.html"><img border="0"
+											 src="../images/button_register_now.gif" />
+				</a>
+			</td>
+
+
+		</tr>
+	</table>
+
+<center>
+
+</center>
+</body>
+</html>

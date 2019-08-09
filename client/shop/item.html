@@ -1,0 +1,148 @@
+<html>
+<head>
+	<TITLE></TITLE>
+	<META content="text/html; charset=utf-8" http-equiv=Content-Type>
+	<script type="text/javascript" src="../js/jquery-3.1.1.min.js"></script>
+	<script type="text/javascript" src="../js/top.js"></script>
+
+	<script>
+
+		$(function () {
+
+		    var url=window.location.search;
+		    var b=url.split("&");
+			var a=b[0].split("=");
+			var c=b[1].split("=");
+
+			// alert(c[1])
+			// alert(a[1])
+			var QUERY_ITEM="http://localhost:8080/pet/queryItem/"+c[1]+"/"+a[1];
+			$.ajax({
+
+				url:QUERY_ITEM,
+				type:"get",
+				dataType:"text json",
+				statusCode:{
+				    200:function (data) {
+
+						$("#img").attr("src","../images/"+data.product.pic);
+						$("#itemid").html(data.itemid);
+                        $("#itemno").html(data.itemno);
+                        $("#descn").html(data.attrl+data.product.descn);
+                        $("#price").html(data.listprice);
+
+                    }
+				}
+
+			})
+
+        })
+
+		function add() {
+
+            var itemid=$("#itemid").html();
+            var quantity=$("#quantity").val();
+
+            var ADD_CART="http://localhost:8080/cart/addCart/"+itemid+"/"+quantity;
+
+            $.ajax({
+				url:ADD_CART,
+				type:"post",
+				dataType:"text json",
+				statusCode:{
+				    200:function (data) {
+						window.location="cart.html"
+
+                    },
+					404:function (data) {
+						window.location="login.html"
+                    }
+				}
+
+			})
+
+
+        }
+
+
+
+
+	</script>
+
+</head>
+<body>
+
+
+<div id="top">
+
+
+</div>
+
+
+<td valign="top" width="10%" align="left">
+	<table align="left" bgcolor="#008800" border="0" cellspacing="2"
+		   cellpadding="2">
+		<tr>
+			<td bgcolor="#FFFF88">
+				<a href="main.html"><b><font color="BLACK" size="2">&lt;&lt; 主菜单 </font>
+				</b></a>
+			</td>
+		</tr>
+	</table>
+</td>
+
+
+
+<p>
+<table align="center" bgcolor="#008800" cellspacing="2" cellpadding="3"
+		border="0" width="60%">
+
+	<td bgcolor="#FFFFFF">
+		<img id="img">
+	</td>
+	</tr>
+	<tr bgcolor="#FFFF88">
+		<td width="100%" bgcolor="#cccccc">
+			<span id="itemid"></span>
+		</td>
+	</tr>
+	<tr bgcolor="#FFFF88">
+		<td>
+			<b><font size="4">
+
+				<span id="itemno"></span>
+			</font>
+			</b>
+		</td>
+	</tr>
+	<tr bgcolor="#FFFF88">
+		<td>
+			<font size="3"><i></i>
+				<span id="descn"></span>
+				</i>
+			</font>
+		</td>
+	</tr>
+	<tr bgcolor="#FFFF88">
+		<td>
+			<span id="price"></span>
+		</td>
+	</tr>
+
+	<tr bgcolor="#FFFF88">
+		<td>
+			<input type="number" name="quantity" value="1" min="0" max="100" id="quantity">
+		</td>
+	</tr>
+
+
+
+	<tr bgcolor="#FFFF88">
+			<td>
+				<input type="image"  border="0" src="../images/button_add_to_cart.gif" onclick="add()"/>
+				</a>
+			</td>
+		</tr>
+	</table>
+</body>
+</html>

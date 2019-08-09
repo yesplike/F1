@@ -1,0 +1,219 @@
+<html>
+<head>
+	<TITLE></TITLE>
+	<META content="text/html; charset=utf-8" http-equiv=Content-Type>
+	<script type="text/javascript" src="../js/jquery-3.1.1.min.js"></script>
+	<script type="text/javascript" src="../js/tojson.js"></script>
+	<script type="text/javascript" src="../js/top.js"></script>
+
+
+	<script>
+
+		$(function () {
+
+		    var QUERY_CATE="http://localhost:8080/pet/queryCategory";
+		    $.ajax({
+				url:QUERY_CATE,
+				dataType:"text json",
+				type:"get",
+				statusCode:{
+				    200:function (data) {
+						$("#cate").empty();
+
+						$(data).each(function (index,val) {
+
+						    $("#cate").append("<option value='"+val.catid+"'>"+val.name+"</option>")
+                        })
+
+                    }
+				}
+			})
+
+        })
+
+
+	</script>
+
+	<script>
+
+		$(function () {
+            $("#sub").click(function () {
+
+                var username=$("#username").val();
+                var password=$("#password").val();
+                var repassword=$("#repassword").val();
+                var email=$("#email").val();
+                var xm=$("#xm").val();
+
+                if((username==""||username.length<0)||(password==""||password.length<0)||(repassword==""||repassword.length<0)){
+                    alert("请输入用户名和密码！");
+                    return;
+                }
+                if(password!=repassword){
+                    alert("两次输入的密码不一致!");
+                    return;
+                }
+                if((email!=""||email.length>0)){
+                    var r= /^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/;
+                    if(!r.test(email)){
+                        alert("邮箱格式错误！");
+                        return;
+                    }
+                }
+
+                var d=JSON.stringify($("#form1").serializeObject());
+
+
+                var ADD_USER="http://localhost:8080/account/register";
+
+                $.ajax({
+                    contentType: "application/json",
+                    url:ADD_USER,
+                    data:d,
+                    dataType:"text json",
+                    type:"post",
+                    statusCode:{
+                        200:function (data) {
+                            alert("注册成功");
+                            window.location="login.html"
+                        },
+                        404:function (data) {
+                            alert("用户已存在");
+                            window.location="register.html";
+                        }
+                    }
+
+
+                })
+
+            })
+        })
+
+	</script>
+
+</head>
+
+<body>
+<div id="top">
+
+</div>
+
+<td valign="top" width="10%" align="left">
+	<table align="left" bgcolor="#008800" border="0" cellspacing="2"
+		   cellpadding="2">
+		<tr>
+			<td bgcolor="#FFFF88">
+				<a href="main.html"><b><font color="BLACK" size="2">&lt;&lt; 主菜单 </font>
+				</b></a>
+			</td>
+		</tr>
+	</table>
+</td>
+
+	<form id="form1" name="form1">
+	<TABLE cellpadding=10 cellspacing=0 align=center border=1 width="400"
+		bgcolor=#dddddd>
+
+		<TR>
+			<TD>
+				<FONT color=darkgreen>
+					<H3>
+						基本信息
+					</H3>
+				</FONT>
+				<TABLE border=0  bgcolor=#FFFF88  width="100%">
+					<TR bgcolor=#FFFF88>						
+						<TD>
+						 	用户名:<input type="text" id="username" name="username"/>
+						</TD>
+					</TR>
+					<TR bgcolor=#FFFF88>
+						
+						<TD>
+							 密&nbsp;&nbsp;码:	<input type="text" id="password" name="password"/>
+						</TD>
+					</TR>
+					<TR bgcolor=#FFFF88>
+						
+						<TD>
+							再次输入:<input type="text" id="repassword" name="repassword"/>
+						</TD>
+					</TR>
+				</TABLE>
+
+
+
+
+
+				<FONT color=darkgreen>
+					<H3>
+						附加信息
+					</H3>
+				</FONT>
+
+				<TABLE bgcolor="#FFFF88" border=0 
+					bgcolor=#FFFF88 width="100%">
+					<TR bgcolor=#FFFF88>
+						
+						<TD>
+							 邮箱:<input type="text" id="email" name="email" />
+						</TD>
+					</TR>
+					
+					<TR bgcolor=#FFFF88>
+						
+						<TD>
+							 姓名:<input type="text" id="xm" name="xm"/>
+						</TD>
+					</TR>
+					
+					<TR bgcolor=#FFFF88>
+						
+						<TD>
+							地址:<input type="text" id="address" name="address"/>
+						</TD>
+					</TR>
+					
+					
+				</TABLE>
+
+
+				<FONT color=darkgreen><H3>
+						 爱好信息
+					</H3>
+				</FONT>
+
+				<TABLE bgcolor="#FFFF88" border=0 cellpadding=3 cellspacing=1 width="100%">
+					<TR bgcolor=#FFFF88>
+						
+						<TD>
+							语种:<select name="profile.lang" id="lang">
+							<option value="eng">
+								英语
+							</option>
+							<option value="chi">
+								汉语
+							</option>
+						</select>
+						</TD>
+					</TR>
+					<TR bgcolor=#FFFF88>
+						
+						<TD>
+							宠物:<select name="profile.catid" id="cate">
+
+
+						</select>
+						</TD>
+					</TR>
+					
+				</TABLE>
+	</TABLE>
+	</form>
+	<BR>
+	<CENTER>
+		<input border=0 type="image" src="../images/button_submit.gif" id="sub" name="sub"/>
+	</CENTER>
+
+</body>
+</html>

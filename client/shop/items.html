@@ -1,0 +1,108 @@
+<html>
+<head>
+	<TITLE></TITLE>
+	<META content="text/html; charset=utf-8" http-equiv=Content-Type>
+
+	<script type="text/javascript" src="../js/jquery-3.1.1.min.js"></script>
+	<script type="text/javascript" src="../js/top.js"></script>
+
+	<script>
+
+		 $(function () {
+
+		     var url=window.location.search;
+             //?productid=4
+             var a=url.split("=");
+		 	 var QUERY_ITEMS="http://localhost:8080/pet/queryItems/"+a[1];
+		     $.ajax({
+		 		url:QUERY_ITEMS,
+		 		dataType:"text json",
+		 		type:"get",
+		 		statusCode:{
+		 		    200:function (data) {
+                         var str="";
+
+                         $(data).each(function (index,val) {
+
+                             str+="<tr bgcolor=\"#FFFF88\">"+
+		 							"<td><d><a href='item.html?itemid="+val.itemid+"&productid="+val.productid+"'>"+val.itemno+"</a></d></td>"+
+		 							"<td><d>"+val.productid+"</d></td>"+
+                                 	"<td><d>"+val.product.name+"</d></td>"+
+                                 	"<td><d>"+val.listprice+"</d></td>"+
+                                 	"<td><d>"+val.attrl+" "+val.product.descn+"</d></td>"+
+                                 	"<td><d><img src='../images/"+val.product.pic+"'></d></td>"
+                         });
+		 				$("#show").append(str)
+                     }
+		 		}
+
+		 	})
+
+
+         })
+
+
+	</script>
+
+
+</head>
+<body>
+
+<div id="top">
+
+
+</div>
+
+<td valign="top" width="10%" align="left">
+	<table align="left" bgcolor="#008800" border="0" cellspacing="2"
+		   cellpadding="2">
+		<tr>
+			<td bgcolor="#FFFF88">
+				<a href="main.html"><b><font color="BLACK" size="2">&lt;&lt; 主菜单 </font>
+				</b></a>
+			</td>
+		</tr>
+	</table>
+</td>
+
+<p>
+
+	<center>
+		<h2>
+		</h2>
+	</center>
+
+	<table id="show" align="center" bgcolor="#008800" border="0"
+		   cellspacing="2" cellpadding="3">
+		<tr bgcolor="#CCCCCC">
+			<td>
+				项目编号
+			</td>
+			<td>
+				产品编号
+			</td>
+			<td>
+				产品名称
+			</td>
+			<td>
+				单价
+			</td>
+			<td>
+				描述
+			</td>
+			<td>
+				&nbsp;
+			</td>
+		</tr>
+
+
+		<!--<tr>-->
+			<!--<td bgcolor="#FFFFFF" colspan="2">-->
+
+
+			<!--</td>-->
+		<!--</tr>-->
+	</table>
+
+</body>
+</html>

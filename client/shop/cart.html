@@ -1,0 +1,200 @@
+<html>
+<head>
+	<TITLE></TITLE>
+	<META content="text/html; charset=utf-8" http-equiv=Content-Type>
+
+	<script type="text/javascript" src="../js/jquery-3.1.1.min.js"></script>
+	<script type="text/javascript" src="../js/top.js"></script>
+
+	<script>
+
+		var total=0;
+
+        $(function () {
+            var QUERY_CART="http://localhost:8080/cart/queryCart";
+            $.ajax({
+                url:QUERY_CART,
+                type:"get",
+                dataType:"text json",
+                statusCode:{
+                    200:function (data) {
+                        var str="";
+                        $(data).each(function (index,val) {
+                            str+="<tr bgcolor=\"#FFFF88\">" +
+                                "<td>"+val.item.itemid+"</td>" +
+                                "<td>"+val.item.productid+"</td>" +
+                                "<td>"+val.item.product.descn+"</td>" +
+                                "<td>"+val.item.attrl+"</td>" +
+                                "<td><img src='../images/"+val.item.product.pic+"'></td>" +
+                                "<td>"+val.item.listprice+"</td>"+
+                                "<td><input id='quantity' type='number' value='"+val.quantity+"' min='1' max='100' onchange='update("+val.item.itemid+",this)'></td>" +
+                                "<td>"+(val.quantity*val.item.listprice)+"</td>" +
+                                // border='0' src='../images/button_remove.gif'
+                                "<td>"+"<input id='remove' type='image' src='../images/button_remove.gif' onclick='del("+val.item.itemid+")'></td>"+
+                                "</tr>";
+                            total=total+(val.quantity*val.item.listprice)
+                        });
+                        $("#show").append(str);
+                    },
+                    404:function () {
+                        alert("您的购物车没有货物")
+                    },
+                    400:function () {
+                        window.location="login.html"
+                    }
+                }
+
+            })
+        });
+
+        function del(itemid) {
+
+            var DEL_CART="http://localhost:8080/cart/delQuantity/"+itemid;
+
+            $.ajax({
+                url:DEL_CART,
+                type:"post",
+                dataType:"text json",
+                statusCode:{
+                    200:function (data) {
+                        window.location="cart.html"
+                    }
+                }
+            })
+        }
+
+
+
+        function update(itemid,self) {
+
+		    var quantity=self.value;
+            var UPDATE_QUANTITY="http://localhost:8080/cart/updateQuantity/"+itemid+"/"+quantity;
+
+            $.ajax({
+				url:UPDATE_QUANTITY,
+				type:"post",
+				dataType:"text json",
+				statusCode:{
+				    200:function (data) {
+						window.location="cart.html"
+                    }
+				}
+			})
+        }
+
+
+        function checkout() {
+
+            var CHECKOUT_URL="http://localhost:8080/cart/checkout/"+total;
+            $.ajax({
+
+				url:CHECKOUT_URL,
+				type:"post",
+				dataType:"text json",
+				statusCode:{
+
+                    200: function (data) {
+
+                        window.location = "main.html";
+						alert("花费"+total+"元");
+                    },
+                    404: function (data) {
+
+                        alert("你还没买商品");
+
+                    }
+
+				}
+			})
+
+        }
+
+
+
+	</script>
+
+
+
+
+</head>
+<body>
+
+<div id="top">
+
+</div>
+
+<table border="0" width="100%" cellspacing="0" cellpadding="0">
+	<tr>
+		<td valign="top" width="5%" align="left">
+			<table align="left" bgcolor="#008800" border="0" cellspacing="2"
+				cellpadding="2">
+				<tr>
+					<td bgcolor="#FFFF88">
+						<a href="main.html"><b><font color="BLACK" size="2">&lt;&lt; 主菜单</font>
+				</b></a>
+					</td>
+				</tr>
+			</table>
+		</td>
+		<td valign="top" align="center">
+			<h2 align="center">
+				
+			</h2>
+			<form name="form1" method="post"
+				action="">
+				
+				<table id="show" align="center" bgcolor="#008800" border="0" cellspacing="2"
+					cellpadding="5" >
+					<tr bgcolor="#cccccc">
+						<td>
+							项目编号
+						</td>
+						<td>
+							产品编号
+						</td>
+						<td>
+							产品描述
+						</td>
+						<td>
+							<b>项目描述</b>
+						</td>
+						<td>
+							<b>图片</b>
+						</td>
+						<td width="100">
+							单价
+						</td>
+						<td>
+							数量
+						</td>
+						<td>
+							合计
+						</td>
+						<td>
+							&nbsp;
+						</td>
+					</tr>
+
+
+				</table>
+
+			</form>
+
+
+			<br />
+			<center>
+				<input type="image" border="0" src="../images/button_checkout.gif" onclick="checkout()"/>
+
+			</center>
+
+		</td>
+
+
+
+
+	</tr>
+</table>
+
+<br>
+</body>
+</html>
